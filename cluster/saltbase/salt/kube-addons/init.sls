@@ -1,4 +1,4 @@
-{% if pillar.get('enable_cluster_monitoring', '').lower() == 'true' %}
+{% if pillar.get('enable_cluster_monitoring',False ) == True %}
 /etc/kubernetes/addons/cluster-monitoring:
   file.recurse:
     - source: salt://kube-addons/cluster-monitoring
@@ -9,7 +9,7 @@
     - file_mode: 644
 {% endif %}
 
-{% if pillar.get('enable_cluster_dns', '').lower() == 'true' %}
+{% if pillar.get('enable_cluster_dns',False ) == True %}
 /etc/kubernetes/addons/dns/skydns-svc.yaml:
   file.managed:
     - source: salt://kube-addons/dns/skydns-svc.yaml.in
@@ -27,9 +27,9 @@
     - makedirs: True
 {% endif %}
 
-{% if pillar.get('enable_node_logging', '').lower() == 'true'
+{% if pillar.get('enable_node_logging',False ) == True 
    and pillar.get('logging_destination').lower() == 'elasticsearch'
-   and pillar.get('enable_cluster_logging', '').lower() == 'true' %}
+   and pillar.get('enable_cluster_logging',False ) == True %}
 /etc/kubernetes/addons/fluentd-elasticsearch:
   file.recurse:
     - source: salt://kube-addons/fluentd-elasticsearch

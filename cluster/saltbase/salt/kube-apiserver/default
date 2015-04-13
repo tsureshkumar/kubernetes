@@ -56,6 +56,9 @@
     # TODO: generate and distribute tokens for other cloud providers.
     {% set token_auth_file = "--token_auth_file=/srv/kubernetes/known_tokens.csv" -%}
 {% endif -%}
+{% if grains.cloud in [ 'vsphere' ] -%}
+    {% set token_auth_file = "" -%}
+{% endif -%}
 {% endif -%}
 
 {% set admission_control = "" -%}

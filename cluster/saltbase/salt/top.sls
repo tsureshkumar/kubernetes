@@ -14,7 +14,10 @@ base:
     - cadvisor
     - kubelet
     - kube-proxy
-{% if pillar.get('enable_node_logging', '').lower() == 'true' %}
+{% if pillar.get('enable_node_monitoring', False) == True %}
+    - cadvisor
+{% endif %}
+{% if pillar.get('enable_node_logging', False) == True %}
   {% if pillar['logging_destination'] is defined and pillar['logging_destination'] == 'elasticsearch' %}
     - fluentd-es
   {% endif %}

@@ -209,6 +209,14 @@ function kube-scp {
   scp ${SSH_OPTS-} "${src}" "kube@${host}:${dst}"
 }
 
+# Copy file over ssh
+function kube-rscp {
+  local host="$1"
+  local src="$2"
+  local dst="$3"
+  scp ${SSH_OPTS-} "kube@${host}:${src}" "${dst}"
+}
+
 # Instantiate a generic kubernetes virtual machine (master or minion)
 #
 # Usage:
@@ -233,7 +241,8 @@ function kube-up-vm {
     "${vm_name}"
 
   # Retrieve IP first, to confirm the guest operations agent is running.
-  govc vm.ip "${vm_name}" > /dev/null
+#  govc vm.ip "${vm_name}" > /dev/null
+  vm_ip=$(govc vm.ip "${vm_name}")
 
   govc guest.mkdir \
     -vm="${vm_name}" \
@@ -247,6 +256,7 @@ function kube-up-vm {
     -f \
     "${KUBE_TEMP}/${vm_name}-authorized_keys" \
     /home/kube/.ssh/authorized_keys
+  kube-ssh $vm_ip "sudo apt-get update && sudo apt-get install -y curl"
 }
 
 # Kick off a local script on a kubernetes virtual machine (master or minion)

@@ -125,6 +125,11 @@ elif [[ "$KUBERNETES_PROVIDER" == "libvirt-coreos" ]]; then
   config=(
     "--server=http://${KUBE_MASTER_IP}:8080"
   )
+elif [[ "$KUBERNETES_PROVIDER" == "vsphere" ]]; then
+  config=(
+    "--server=https://${KUBE_MASTER_IP}"
+    "--auth-path=$HOME/.kubernetes_auth"
+  )
 fi
 
 echo "current-context: \"$(${kubectl} "${config[@]:+${config[@]}}" config view -o template --template='{{index . "current-context"}}')\"" >&2
